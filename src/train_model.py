@@ -79,3 +79,11 @@ print(f"Root Mean Squared Error (RMSE): ${rmse:,.2f}")
 # 4. Mean Absolute Percentage Error (Fairness Metric)
 mape = mean_absolute_percentage_error(y_true=y_test_real, y_pred=price_pred)
 print(f"Mean Absolute Percentage Error (MAPE): {mape:.2%}")
+
+
+#9-savinf model
+print("--- Saving Model ---")
+os.makedirs("models", exist_ok=True)
+model_path = "models/xgboost_pipeline.pkl"
+joblib.dump(pipeline, model_path)
+print(f"Model successfully saved to: {model_path} 🚀")
