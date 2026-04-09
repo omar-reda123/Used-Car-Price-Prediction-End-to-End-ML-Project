@@ -34,6 +34,8 @@ with col1:
     milage = st.number_input("Mileage (miles)", min_value=0, max_value=500000, value=50000, step=1000)
     engine_hp = st.number_input("Engine HP", min_value=50.0, max_value=1500.0, value=300.0, step=10.0)
     engine_liters = st.number_input("Engine Liters", min_value=0.8, max_value=10.0, value=5.0, step=0.1)
+    engine_cylinders = st.number_input("Engine Cylinders", min_value=2, max_value=16, value=6, step=1)
+    transmission_speeds = st.number_input("Transmission Speeds", min_value=1, max_value=10, value=6, step=1)
 
 with col2:
     st.subheader("Condition & Features")
@@ -42,7 +44,7 @@ with col2:
     ext_col = st.text_input("Exterior Color", value="Black")
     int_col = st.text_input("Interior Color", value="Black")
     accident = st.selectbox("Accident History", ['None reported', 'At least 1 accident or damage reported'])
-    clean_title = st.selectbox("Clean Title", ['Yes', 'No'])
+    clean_title = st.selectbox("Clean Title", ['Yes', 'Unknown'])
 
 # --- Soft Warnings (Smart UI) ---
 if milage > 300000:
@@ -64,16 +66,38 @@ if st.button("Predict Price 💰", use_container_width=True):
         'fuel_type': [fuel_type],
         'engine_hp': [engine_hp],
         'engine_liters': [engine_liters],
+        'engine_cylinders': [engine_cylinders],       
         'ext_col': [ext_col],
         'int_col': [int_col],
         'accident': [accident],
         'clean_title': [clean_title],
-        'transmission_type': [transmission_type]
+        'transmission_type': [transmission_type],
+        'transmission_speeds': [transmission_speeds]     
     })
 
     try:
         pred_log = pipeline.predict(input_data)
         pred_price = np.expm1(pred_log)[0]
+        
+        # --- 🛡️ Business Guardrails (طبقة حماية البيزنس) ---
+        
+        # 1. تسعير السيارات الخارقة (Supercars)
+        if engine_hp >= 700:
+            pred_price = pred_price * 2.8
+        elif engine_hp >= 500:
+            pred_price = pred_price * 1.5
+            
+        # 2. عقاب المسافات الفلكية
+        if milage > 250000:
+            pred_price = pred_price * 0.3
+            
+        # 3. عقاب الحوادث للعربيات القديمة
+        if model_year < 2012 and accident == 'At least 1 accident or damage reported':
+            pred_price = pred_price * 0.5
+            
+        # 4. الحد الأدنى لسعر الخردة
+        if pred_price < 500:
+            pred_price = 500.0
         
         st.success(f"### Estimated Price: ${pred_price:,.2f}")
         st.balloons()
