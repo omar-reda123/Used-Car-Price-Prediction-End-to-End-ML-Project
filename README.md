@@ -16,6 +16,7 @@ This project was built from scratch to simulate a real-world data science lifecy
 4. **Model Training & Critical Evaluation 🧠:** Trained an **XGBoost Regressor** as the primary engine. During evaluation, I noticed a significant gap between the Mean Absolute Error (MAE) and the Root Mean Squared Error (RMSE). This is a strong indicator that extreme outliers (hyper-expensive supercars or severely damaged vehicles) are still punishing the model. Acknowledging this behavior was a key insight for future versions.
 5. **Business Logic & Guardrails 🛡️:** Since pure ML models fail on extreme edge cases, I implemented custom "Business Guardrails" during inference. This logic intelligently depreciates scrap cars and appreciates supercars based on HP and mileage, mimicking human market expertise and mitigating some of the outlier effects.
 6. **Deployment & UI 💻:** Developed an interactive web application using **Streamlit**. Implemented `Defensive Programming` in the frontend to restrict illogical user inputs (e.g., entering a year in the distant future) and provide real-time UI warnings.
+**link:** https://used-car-price-prediction-end-to-end-ml-project-e42domteq63pzt.streamlit.app/
 
 ## ✨ Key Features
 * **Robust ML Engine:** Powered by a baseline **XGBoost Regressor**.
