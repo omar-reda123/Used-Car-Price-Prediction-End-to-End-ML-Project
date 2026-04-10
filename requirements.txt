@@ -1,7 +1,9 @@
-numpy
 pandas
+numpy
 matplotlib
 seaborn
-scikit-learn
-jupyter
 joblib
+scikit-learn
+xgboost
+category_encoders
+streamlit
